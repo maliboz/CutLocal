@@ -69,14 +69,14 @@ public sealed class MainWindowRenderTests
                 Left = 0,
                 Top = 0,
             };
-            window.Show();
-            window.UpdateLayout();
-
-            Assert.NotNull(window.Icon);
             Assert.Equal(1380, window.Width);
             Assert.Equal(860, window.Height);
             Assert.Equal(1120, window.MinWidth);
             Assert.Equal(720, window.MinHeight);
+            window.Show();
+            window.UpdateLayout();
+
+            Assert.NotNull(window.Icon);
             Image brandLogo = Assert.IsType<Image>(window.FindName("BrandLogo"));
             Assert.NotNull(brandLogo.Source);
 
