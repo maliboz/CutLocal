@@ -73,19 +73,25 @@ public sealed class MainWindowRenderTests
             window.UpdateLayout();
 
             Assert.NotNull(window.Icon);
+            Assert.Equal(1380, window.Width);
+            Assert.Equal(860, window.Height);
+            Assert.Equal(1120, window.MinWidth);
+            Assert.Equal(720, window.MinHeight);
             Image brandLogo = Assert.IsType<Image>(window.FindName("BrandLogo"));
             Assert.NotNull(brandLogo.Source);
 
             int width = Math.Max(1, (int)Math.Ceiling(window.ActualWidth));
             int height = Math.Max(1, (int)Math.Ceiling(window.ActualHeight));
+            Assert.InRange(width, 1120, 1380);
+            Assert.InRange(height, 720, 860);
             RenderTargetBitmap bitmap = new(width, height, 96, 96, PixelFormats.Pbgra32);
             bitmap.Render(window);
             bitmap.Freeze();
 
             string artifactPath = SaveArtifact(bitmap, "phase-4-single-window.png");
 
-            Assert.Equal(1380, bitmap.PixelWidth);
-            Assert.Equal(860, bitmap.PixelHeight);
+            Assert.Equal(width, bitmap.PixelWidth);
+            Assert.Equal(height, bitmap.PixelHeight);
             Assert.True(new FileInfo(artifactPath).Length > 10_000);
 
             VerifyTransparentAfterPreviewDoesNotOverlapBeforePreview();
