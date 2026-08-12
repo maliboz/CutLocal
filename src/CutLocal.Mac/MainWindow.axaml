@@ -1,0 +1,206 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="CutLocal.Mac.MainWindow"
+        x:CompileBindings="False"
+        Title="CutLocal — Local Background Remover"
+        Icon="avares://CutLocal/Assets/cutlocal-logo.png"
+        Width="1280"
+        Height="820"
+        MinWidth="1040"
+        MinHeight="680"
+        Background="#101216">
+  <Window.Styles>
+    <Style Selector="TextBlock.sectionTitle">
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Foreground" Value="#F4F6F8" />
+    </Style>
+    <Style Selector="TextBlock.muted">
+      <Setter Property="Foreground" Value="#9AA3AF" />
+      <Setter Property="FontSize" Value="12" />
+    </Style>
+    <Style Selector="Border.card">
+      <Setter Property="Background" Value="#181B21" />
+      <Setter Property="BorderBrush" Value="#2A2F38" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="12" />
+      <Setter Property="Padding" Value="16" />
+    </Style>
+    <Style Selector="Button.primary">
+      <Setter Property="Background" Value="#7868FF" />
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Padding" Value="18,11" />
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    <Style Selector="Button.secondary">
+      <Setter Property="Background" Value="#242832" />
+      <Setter Property="Foreground" Value="#EEF0F4" />
+      <Setter Property="Padding" Value="14,9" />
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+  </Window.Styles>
+
+  <Grid RowDefinitions="72,*,64">
+    <Border Grid.Row="0" Background="#14171C" BorderBrush="#252A32" BorderThickness="0,0,0,1">
+      <Grid Margin="22,0" ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+        <Image Grid.Column="0"
+               Width="42"
+               Height="42"
+               Source="avares://CutLocal/Assets/cutlocal-logo.png"
+               Stretch="Uniform" />
+        <StackPanel Grid.Column="1" Margin="13,0,0,0" VerticalAlignment="Center">
+          <TextBlock Text="CutLocal" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF" />
+          <TextBlock Classes="muted" Text="Görsellerin cihazından çıkmadan çalışan macOS sürümü" />
+        </StackPanel>
+        <Border Grid.Column="2" Background="#1E2A25" CornerRadius="99" Padding="12,6">
+          <TextBlock Text="●  %100 YEREL · CPU" Foreground="#72D9A0" FontSize="11" FontWeight="SemiBold" />
+        </Border>
+      </Grid>
+    </Border>
+
+    <Grid Grid.Row="1" Margin="18" ColumnDefinitions="330,16,*">
+      <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="12">
+          <Border Classes="card">
+            <StackPanel Spacing="10">
+              <TextBlock Classes="sectionTitle" Text="1 · Kaynak görsel" />
+              <TextBlock Classes="muted" Text="Şimdilik güvenli PNG hattı kullanılır." />
+              <Button Classes="secondary"
+                      Content="PNG seç…"
+                      IsEnabled="{Binding IsNotBusy}"
+                      Click="OnSelectImageClick" />
+              <TextBlock Text="{Binding InputDisplayName}"
+                         TextTrimming="CharacterEllipsis"
+                         Foreground="#DCE0E7" />
+            </StackPanel>
+          </Border>
+
+          <Border Classes="card">
+            <StackPanel Spacing="10">
+              <TextBlock Classes="sectionTitle" Text="2 · Model" />
+              <ComboBox ItemsSource="{Binding Models}"
+                        SelectedItem="{Binding SelectedModel, Mode=TwoWay}"
+                        IsEnabled="{Binding IsNotBusy}">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding DisplayText}" />
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+              <TextBlock Classes="muted" Text="{Binding SelectedModelStatus}" TextWrapping="Wrap" />
+              <Border Background="#2A211B"
+                      BorderBrush="#644A35"
+                      BorderThickness="1"
+                      CornerRadius="8"
+                      Padding="10"
+                      IsVisible="{Binding NeedsLicenseAcknowledgement}">
+                <StackPanel Spacing="8">
+                  <TextBlock Text="Bu model yalnızca ticari olmayan kullanım içindir."
+                             Foreground="#F5C58A"
+                             TextWrapping="Wrap" />
+                  <CheckBox Content="Lisans koşulunu okudum ve kabul ediyorum"
+                            IsChecked="{Binding IsLicenseAcknowledged, Mode=TwoWay}" />
+                </StackPanel>
+              </Border>
+              <Button Classes="secondary"
+                      Content="{Binding DownloadActionText}"
+                      IsVisible="{Binding ShowDownloadAction}"
+                      IsEnabled="{Binding CanDownloadSelectedModel}"
+                      Click="OnDownloadModelClick" />
+            </StackPanel>
+          </Border>
+
+          <Border Classes="card">
+            <StackPanel Spacing="8">
+              <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0" Classes="sectionTitle" Text="Eşik" />
+                <TextBlock Grid.Column="1" Text="{Binding ThresholdText}" Foreground="#AFA7FF" />
+              </Grid>
+              <Slider Minimum="0" Maximum="1" TickFrequency="0.01"
+                      Value="{Binding Threshold, Mode=TwoWay}"
+                      IsEnabled="{Binding IsNotBusy}" />
+              <TextBlock Classes="muted" Text="Düşük değer daha çok alanı ön planda tutar." TextWrapping="Wrap" />
+
+              <Grid Margin="0,7,0,0" ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0" Classes="sectionTitle" Text="Kenar yumuşatma" />
+                <TextBlock Grid.Column="1" Text="{Binding FeatherText}" Foreground="#AFA7FF" />
+              </Grid>
+              <Slider Minimum="0" Maximum="12" TickFrequency="0.5"
+                      Value="{Binding FeatherRadius, Mode=TwoWay}"
+                      IsEnabled="{Binding IsNotBusy}" />
+              <CheckBox Content="Sert maske"
+                        IsChecked="{Binding HardCut, Mode=TwoWay}"
+                        IsEnabled="{Binding IsNotBusy}" />
+              <CheckBox Content="Maskeyi ters çevir"
+                        IsChecked="{Binding InvertMask, Mode=TwoWay}"
+                        IsEnabled="{Binding IsNotBusy}" />
+            </StackPanel>
+          </Border>
+
+          <Border Classes="card">
+            <StackPanel Spacing="9">
+              <TextBlock Classes="sectionTitle" Text="3 · Şeffaf PNG çıktısı" />
+              <TextBlock Classes="muted" Text="{Binding OutputDisplayPath}" TextWrapping="Wrap" />
+              <Button Classes="secondary"
+                      Content="Farklı kaydet…"
+                      IsEnabled="{Binding IsNotBusy}"
+                      Click="OnSelectOutputClick" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </ScrollViewer>
+
+      <Border Grid.Column="2" Classes="card" Padding="0" ClipToBounds="True">
+        <Grid RowDefinitions="54,*">
+          <Grid Grid.Row="0" Background="#1C2027" ColumnDefinitions="*,*">
+            <TextBlock Grid.Column="0" Text="ÖNCE" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Foreground="#AEB6C2" FontSize="12" FontWeight="SemiBold" />
+            <TextBlock Grid.Column="1" Text="SONRA · SAYDAM PNG" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Foreground="#AFA7FF" FontSize="12" FontWeight="SemiBold" />
+          </Grid>
+          <Grid Grid.Row="1" ColumnDefinitions="*,1,*">
+            <Border Grid.Column="0" Background="#20242B">
+              <Grid Margin="18">
+                <Image Source="{Binding InputPreview}" Stretch="Uniform" IsVisible="{Binding HasInputPreview}" />
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                            IsVisible="{Binding HasNoInputPreview}">
+                  <TextBlock Text="Görselini seç" FontSize="18" FontWeight="SemiBold"
+                             Foreground="#D4D8DE" HorizontalAlignment="Center" />
+                  <TextBlock Classes="muted" Text="Orijinal burada görünecek" Margin="0,6,0,0" />
+                </StackPanel>
+              </Grid>
+            </Border>
+            <Border Grid.Column="1" Background="#353A44" />
+            <Border Grid.Column="2" Background="#292D34">
+              <Grid Margin="18">
+                <Image Source="{Binding OutputPreview}" Stretch="Uniform" IsVisible="{Binding HasOutputPreview}" />
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                            IsVisible="{Binding HasNoOutputPreview}">
+                  <TextBlock Text="Şeffaf sonuç" FontSize="18" FontWeight="SemiBold"
+                             Foreground="#D4D8DE" HorizontalAlignment="Center" />
+                  <TextBlock Classes="muted" Text="İşlemden sonra burada görünecek" Margin="0,6,0,0" />
+                </StackPanel>
+              </Grid>
+            </Border>
+          </Grid>
+        </Grid>
+      </Border>
+    </Grid>
+
+    <Border Grid.Row="2" Background="#14171C" BorderBrush="#252A32" BorderThickness="0,1,0,0">
+      <Grid Margin="22,0" ColumnDefinitions="*,260,Auto,Auto" ColumnSpacing="12" VerticalAlignment="Center">
+        <StackPanel Grid.Column="0" Spacing="5">
+          <TextBlock Text="{Binding StatusText}" Foreground="#DCE0E7" TextTrimming="CharacterEllipsis" />
+          <ProgressBar Minimum="0" Maximum="100" Height="4" Value="{Binding ProgressPercent}" />
+        </StackPanel>
+        <Button Grid.Column="1" Classes="secondary" Content="Çıktıyı Finder’da göster"
+                IsVisible="{Binding HasResult}" Click="OnRevealOutputClick" />
+        <Button Grid.Column="2" Classes="secondary" Content="İptal"
+                IsEnabled="{Binding CanCancel}" Click="OnCancelClick" />
+        <Button Grid.Column="3" Classes="primary" Content="Arka planı kaldır"
+                IsEnabled="{Binding CanProcess}" Click="OnProcessClick" />
+      </Grid>
+    </Border>
+  </Grid>
+</Window>

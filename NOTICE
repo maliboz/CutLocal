@@ -1,0 +1,20 @@
+CutLocal
+Copyright 2026 CutLocal contributors
+
+This product is licensed under the Apache License, Version 2.0.
+
+CutLocal is an independent C#/.NET implementation. It does not bundle or run
+the rembg Python package. The rembg project was used as a documented technical
+reference for compatible model preprocessing, postprocessing, and model asset
+distribution. rembg is Copyright (c) 2020-present Daniel Gatis and is licensed
+under the MIT License.
+
+The default U2NetP model originates from the U-2-Net project, licensed under
+Apache-2.0. The optional BiRefNet General Lite codebase is MIT-licensed, but the
+reviewed model weight is conservatively classified as non-commercial because a
+clear weight-specific permissive grant was not identified. Exact artifact
+sources, hashes, versions, and distribution decisions are recorded in
+assets/models/manifests and ThirdPartyNotices.txt.
+
+Full dependency, model, copyright, and license notices are available in
+ThirdPartyNotices.txt and assets/licenses.

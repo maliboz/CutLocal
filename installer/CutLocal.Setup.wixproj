@@ -1,0 +1,31 @@
+<Project Sdk="WixToolset.Sdk/5.0.2">
+  <PropertyGroup>
+    <OutputType>Package</OutputType>
+    <InstallerPlatform>x64</InstallerPlatform>
+    <Cultures>en-US</Cultures>
+    <SuppressValidation>false</SuppressValidation>
+    <!-- ICE91 assumes a package might switch to per-machine scope. CutLocal's
+         Package element is intentionally fixed to Scope="perUser", so that
+         scenario cannot occur. All other Windows Installer ICEs still run. -->
+    <SuppressIces>ICE91</SuppressIces>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <ProductVersion Condition="'$(ProductVersion)' == ''">0.1.5</ProductVersion>
+    <StageRoot Condition="'$(StageRoot)' == ''">$(MSBuildThisFileDirectory)..\artifacts\release-work\installer\CutLocal</StageRoot>
+    <GeneratedWixSource Condition="'$(GeneratedWixSource)' == ''">$(MSBuildThisFileDirectory)..\artifacts\release-work\wix\HarvestedFiles.wxs</GeneratedWixSource>
+    <DefineConstants>
+      ProductVersion=$(ProductVersion);
+      StageRoot=$(StageRoot)
+    </DefineConstants>
+    <OutputName>CutLocal-$(ProductVersion)-win-x64-setup</OutputName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="$(GeneratedWixSource)" />
+    <PackageReference Include="WixToolset.UI.wixext" />
+  </ItemGroup>
+
+  <Target Name="ValidateReleaseInputs" BeforeTargets="Build">
+    <Error Condition="!Exists('$(StageRoot)\CutLocal.exe')" Text="The validated installer stage is missing CutLocal.exe: $(StageRoot)" />
+    <Error Condition="!Exists('$(GeneratedWixSource)')" Text="Generated WiX source is missing: $(GeneratedWixSource)" />
+  </Target>
+</Project>

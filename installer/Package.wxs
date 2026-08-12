@@ -1,0 +1,96 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+  <Package Name="CutLocal"
+           Manufacturer="CutLocal contributors"
+           Version="$(var.ProductVersion)"
+           UpgradeCode="23B936FD-DCB0-4A4F-9B8A-7C1720DD43C6"
+           Scope="perUser"
+           Language="1033"
+           InstallerVersion="500"
+           Compressed="yes">
+    <SummaryInformation Description="CutLocal offline background removal application"
+                        Manufacturer="CutLocal contributors" />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="medium" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of CutLocal is already installed."
+                  Schedule="afterInstallInitialize" />
+
+    <Icon Id="CutLocal.exe" SourceFile="$(var.StageRoot)\CutLocal.exe" />
+    <Property Id="ARPPRODUCTICON" Value="CutLocal.exe" />
+    <StandardDirectory Id="LocalAppDataFolder">
+      <Directory Id="LocalProgramsFolder" Name="Programs">
+        <Directory Id="INSTALLFOLDER" Name="CutLocal" />
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="CutLocalProgramMenuFolder" Name="CutLocal" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="DesktopFolder" />
+
+    <Component Id="StartMenuShortcutComponent"
+               Directory="CutLocalProgramMenuFolder"
+               Guid="E9A6B48C-4387-5DFA-9236-91F8E878EE02">
+      <Shortcut Id="StartMenuShortcut"
+                Name="CutLocal"
+                Description="Offline background removal"
+                Target="[INSTALLFOLDER]CutLocal.exe"
+                WorkingDirectory="INSTALLFOLDER"
+                Icon="CutLocal.exe" />
+      <RemoveFolder Id="RemoveCutLocalProgramMenuFolder" On="uninstall" />
+      <RegistryValue Root="HKCU"
+                     Key="Software\CutLocal\Installer"
+                     Name="StartMenuShortcut"
+                     Type="integer"
+                     Value="1"
+                     KeyPath="yes" />
+    </Component>
+
+    <Component Id="DesktopShortcutComponent"
+               Directory="DesktopFolder"
+               Guid="845D8B6F-EA13-5A86-86BD-56148B73E2B4">
+      <Shortcut Id="DesktopShortcut"
+                Name="CutLocal"
+                Description="Offline background removal"
+                Target="[INSTALLFOLDER]CutLocal.exe"
+                WorkingDirectory="INSTALLFOLDER"
+                Icon="CutLocal.exe" />
+      <RegistryValue Root="HKCU"
+                     Key="Software\CutLocal\Installer"
+                     Name="DesktopShortcut"
+                     Type="integer"
+                     Value="1"
+                     KeyPath="yes" />
+    </Component>
+
+    <Feature Id="ApplicationFeature"
+             Title="CutLocal application"
+             Description="Self-contained offline Windows application"
+             Level="1"
+             Display="expand"
+             AllowAbsent="no">
+      <ComponentGroupRef Id="CoreFiles" />
+      <ComponentRef Id="StartMenuShortcutComponent" />
+
+      <Feature Id="FastModelFeature"
+               Title="Fast offline model (required)"
+               Description="U2NetP model used for fast local background removal"
+               Level="1"
+               AllowAbsent="no">
+        <ComponentGroupRef Id="FastModelFiles" />
+      </Feature>
+
+      <Feature Id="DesktopShortcutFeature"
+               Title="Desktop shortcut"
+               Description="Create a CutLocal shortcut on the desktop"
+               Level="2"
+               AllowAbsent="yes">
+        <ComponentRef Id="DesktopShortcutComponent" />
+      </Feature>
+    </Feature>
+
+    <ui:WixUI Id="WixUI_FeatureTree" InstallDirectory="INSTALLFOLDER" />
+    <WixVariable Id="WixUILicenseRtf" Value="$(sys.SOURCEFILEDIR)SetupInformation.rtf" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+  </Package>
+</Wix>

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.DirectML" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CutLocal.Domain\CutLocal.Domain.csproj" />
+    <ProjectReference Include="..\..\src\CutLocal.Imaging\CutLocal.Imaging.csproj" />
+    <ProjectReference Include="..\..\src\CutLocal.Inference\CutLocal.Inference.csproj" />
+    <ProjectReference Include="..\..\src\CutLocal.Persistence\CutLocal.Persistence.csproj" />
+  </ItemGroup>
+</Project>

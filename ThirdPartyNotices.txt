@@ -1,0 +1,103 @@
+CutLocal third-party notices
+============================
+
+This inventory covers the production application, self-contained .NET runtime,
+native inference/imaging dependencies, and model packs selected at release build
+time. Test-only packages are not distributed with the desktop application.
+
+rembg technical reference
+Source: https://github.com/danielgatis/rembg
+Copyright: Copyright (c) 2020-present Daniel Gatis
+License: MIT
+CutLocal does not distribute or execute the rembg Python package. The project was
+reviewed as a documented behavioral reference for compatible preprocessing and
+postprocessing, and its releases host the exact ONNX artifacts pinned by the
+CutLocal manifests.
+
+.NET 10 runtime and Microsoft.Extensions.* 10.0.0
+Source: https://github.com/dotnet/runtime
+License: MIT
+The portable and installer packages include the exact .NET runtime LICENSE and
+ThirdPartyNotices files produced by the selected SDK/runtime pack.
+
+ONNX Runtime DirectML / Managed 1.24.4
+Source: https://github.com/microsoft/onnxruntime
+License: MIT
+The package's full ThirdPartyNotices file is copied into release licenses.
+
+ONNX Runtime CPU 1.24.4 (macOS arm64) and 1.23.2 (macOS x64)
+Source: https://github.com/microsoft/onnxruntime
+License: MIT
+Each macOS archive receives the license and third-party notice from the exact
+runtime package used for that architecture.
+
+Microsoft DirectML 1.15.4
+Source: https://github.com/microsoft/DirectML
+License: MIT
+
+SkiaSharp / Skia 4.150.1
+Source: https://github.com/mono/SkiaSharp and https://skia.org/
+License: MIT and BSD-style upstream notices
+
+Avalonia UI 12.1.0, MicroCom.Runtime 0.11.6, HarfBuzzSharp 8.3.1.3,
+and Tmds.DBus.Protocol 0.94.1 (macOS application)
+Source: https://github.com/AvaloniaUI/Avalonia and the respective NuGet packages
+License: MIT
+Platform-specific native and transitive notices remain included in the resolved
+NuGet packages and the release inventory.
+
+CommunityToolkit.Mvvm 8.4.2
+Source: https://github.com/CommunityToolkit/dotnet
+License: MIT
+
+Microsoft.Extensions.* 10.0.0
+Source: https://github.com/dotnet/runtime and https://github.com/dotnet/extensions
+License: MIT
+
+Serilog 4.3.0, Serilog.Extensions.Hosting 10.0.0,
+Serilog.Extensions.Logging 10.0.0, and Serilog.Sinks.File 7.0.0
+Source: https://github.com/serilog
+License: Apache-2.0
+
+System.Numerics.Tensors 9.0.0
+Source: https://github.com/dotnet/runtime
+License: MIT
+
+WiX Toolset SDK and UI extension 5.0.2 (installer build tooling)
+Source: https://github.com/wixtoolset/wix
+License: Microsoft Reciprocal License (MS-RL)
+WiX 5 is intentionally pinned: the upstream maintenance-fee program starts with
+WiX 6. The canonical MS-RL text is distributed in licenses/MS-RL.txt.
+
+U-2-Net / U2NetP default fast model
+Source: https://github.com/xuebinqin/U-2-Net
+ONNX distribution reference: https://github.com/danielgatis/rembg/releases/tag/v0.0.0
+License: Apache-2.0
+Release manifest: assets/models/manifests/u2netp.json
+The weight is not stored in repository history. Release tooling downloads it over
+HTTPS and requires exact byte length and SHA-256 before staging.
+
+BiRefNet General Lite optional balanced model pack
+Source: https://github.com/ZhengPeng7/BiRefNet
+ONNX distribution reference: https://github.com/danielgatis/rembg/releases/tag/v0.0.0
+Policy: LicenseRef-BiRefNet-Weights-NonCommercial
+Release manifest: assets/models/manifests/birefnet-general-lite.json
+The source-code repository is MIT-licensed, but the reviewed model-weight file
+does not carry a sufficiently clear weight-specific permissive grant and the
+upstream documentation describes weights as non-commercial. CutLocal therefore
+does not bundle this weight in standard releases. A user may initiate a verified
+download only after accepting the restricted-use notice. See
+licenses/BiRefNet-Weights-NOTICE.txt.
+
+BRIA RMBG-2.0 optional non-commercial model
+Source: https://huggingface.co/briaai/RMBG-2.0
+ONNX distribution reference: https://github.com/danielgatis/rembg/releases/tag/v0.0.0
+License: CC BY-NC 4.0 (non-commercial use only; attribution required)
+Release manifest: assets/models/manifests/bria-rmbg-2.0.json
+The weight is never bundled in CutLocal releases or stored in repository history.
+It can be downloaded only after explicit acknowledgement of the non-commercial
+license restriction. See licenses/BRIA-RMBG-2.0-NOTICE.txt.
+
+Canonical MIT, Apache-2.0, BSD-3-Clause, and MS-RL license texts are distributed
+in the licenses directory. Component-specific copyright and transitive notices
+remain in the .NET and ONNX Runtime notice files copied by the release build.

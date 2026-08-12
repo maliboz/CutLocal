@@ -1,0 +1,81 @@
+# .NET and IDE outputs
+**/[Bb]in/
+**/[Oo]bj/
+.vs/
+.vscode/
+.idea/
+.fleet/
+*.user
+*.suo
+*.userprefs
+*.rsuser
+
+# Repository-local toolchains and caches
+.dotnet/
+.tools/
+.nuget/
+packages/
+
+# Tests, benchmarks, coverage, and diagnostics
+TestResults/
+BenchmarkDotNet.Artifacts/
+coverage/
+coverage.*
+*.coverage
+*.coveragexml
+*.trx
+*.testlog
+*.dmp
+*.crash
+*.stackdump
+*.log
+
+# Generated release and installer output
+artifacts/
+*.msi
+*.msix
+*.wixpdb
+*.zip
+*.tar.gz
+*.dmg
+*.pkg
+
+# Model weights and partial downloads
+*.onnx
+*.onnx.data
+*.pt
+*.pth
+*.safetensors
+*.onnx.partial
+*.partial
+*.quarantine
+*.seeding
+
+# Signing material, credentials, and local configuration
+*.pfx
+*.p12
+*.snk
+*.key
+*.pem
+*.cer
+*.crt
+*.secrets.json
+appsettings.Development.json
+.env
+.env.*
+!.env.example
+
+# Temporary and operating-system files
+*.tmp
+*.temp
+*.bak
+*.orig
+*.rej
+*~
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+
+# Local development evidence; curated screenshots live under docs/images
+phase-*-smoke*.png

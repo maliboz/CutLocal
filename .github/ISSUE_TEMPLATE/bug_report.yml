@@ -1,0 +1,83 @@
+name: Bug report
+description: Report a reproducible CutLocal problem
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping improve CutLocal. Do not post private images, credentials, or full personal paths. Report suspected security vulnerabilities privately through the Security tab.
+  - type: input
+    id: version
+    attributes:
+      label: CutLocal version
+      description: Use the About value, release number, or commit hash.
+      placeholder: 0.1.5
+    validations:
+      required: true
+  - type: dropdown
+    id: distribution
+    attributes:
+      label: Distribution
+      options:
+        - Windows MSI
+        - Windows portable ZIP
+        - macOS Apple Silicon archive
+        - macOS Intel archive
+        - Built from source
+    validations:
+      required: true
+  - type: input
+    id: operating_system
+    attributes:
+      label: Operating system and architecture
+      placeholder: Windows 11 25H2 x64, or macOS 15 arm64
+    validations:
+      required: true
+  - type: textarea
+    id: hardware
+    attributes:
+      label: Hardware and processing configuration
+      description: Include CPU, GPU, memory, selected model, provider, and input dimensions.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. Open...
+        2. Select...
+        3. Observe...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Sanitized logs or Terminal output
+      description: Remove personal paths, private image content, and credentials before posting.
+      render: text
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues and did not find a duplicate.
+          required: true
+        - label: I removed private images, credentials, and personal paths.
+          required: true
+        - label: This is not a security vulnerability.
+          required: true

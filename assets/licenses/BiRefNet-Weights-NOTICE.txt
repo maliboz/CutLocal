@@ -1,0 +1,25 @@
+BiRefNet model-weights notice
+=============================
+
+Project: BiRefNet
+Upstream: https://github.com/ZhengPeng7/BiRefNet
+Reviewed model: BiRefNet General Lite, epoch 232
+Reviewed ONNX file: BiRefNet-general-bb_swin_v1_tiny-epoch_232.onnx
+
+The BiRefNet source-code repository contains an MIT license. That repository
+license must not be assumed to grant identical rights for every separately
+published model-weight file. The upstream project documentation states that its
+weights are for non-commercial use in the ONNX/weights discussion and does not
+attach a clear, weight-specific OSI license to the reviewed ONNX artifact.
+
+CutLocal therefore applies a conservative distribution policy:
+
+- SPDX-style policy identifier: LicenseRef-BiRefNet-Weights-NonCommercial
+- Commercial use allowed by CutLocal policy: no
+- Attribution required: yes
+- Bundled in standard CutLocal releases: no
+- Available only after an explicit restricted-license acknowledgement: yes
+
+This notice records CutLocal's engineering policy; it is not a replacement for
+the upstream terms and is not legal advice. Users must review the current
+upstream terms and obtain any permission required for their intended use.

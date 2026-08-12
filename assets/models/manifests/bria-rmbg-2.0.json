@@ -1,0 +1,31 @@
+{
+  "id": "bria-rmbg-2.0",
+  "displayName": "BRIA RMBG 2.0 (Non-Commercial)",
+  "version": "2.0",
+  "fileName": "bria-rmbg-2.0.onnx",
+  "sha256": "5B486F08200F513F460DA46DD701DB5FBB47D79B4BE4B708A19444BCD4E79958",
+  "fileSizeBytes": 1024331469,
+  "downloadUrl": "https://github.com/danielgatis/rembg/releases/download/v0.0.0/bria-rmbg-2.0.onnx",
+  "license": {
+    "spdx": "CC-BY-NC-4.0",
+    "commercialUseAllowed": false,
+    "attributionRequired": true,
+    "source": "https://huggingface.co/briaai/RMBG-2.0"
+  },
+  "input": {
+    "width": 1024,
+    "height": 1024,
+    "layout": "NCHW",
+    "colorOrder": "RGB",
+    "mean": [0.485, 0.456, 0.406],
+    "std": [0.229, 0.224, 0.225],
+    "resizeMode": "stretch"
+  },
+  "output": {
+    "activation": "minmax",
+    "type": "alpha-mask"
+  },
+  "recommendedMemoryMb": 12288,
+  "tier": "quality-noncommercial",
+  "supportedProviders": ["cpu"]
+}

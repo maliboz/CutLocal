@@ -1,0 +1,14 @@
+BRIA RMBG-2.0 model notice
+===========================
+
+Model: BRIA RMBG-2.0
+Developer: BRIA AI
+Official model card: https://huggingface.co/briaai/RMBG-2.0
+License: Creative Commons Attribution-NonCommercial 4.0 International
+License text: https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+The model weights are not included in CutLocal source history, portable archives,
+or MSI packages. CutLocal offers an optional user-initiated download only after an
+explicit non-commercial-use acknowledgement. Commercial use requires a separate
+agreement with BRIA AI. Attribution and all other model-license conditions remain
+the user's responsibility.

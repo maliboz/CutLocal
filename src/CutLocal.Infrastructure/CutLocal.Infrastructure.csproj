@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RuntimeIdentifier />
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CutLocal.Application\CutLocal.Application.csproj" />
+    <ProjectReference Include="..\CutLocal.Contracts\CutLocal.Contracts.csproj" />
+    <ProjectReference Include="..\CutLocal.Domain\CutLocal.Domain.csproj" />
+    <ProjectReference Include="..\CutLocal.Imaging\CutLocal.Imaging.csproj" />
+    <ProjectReference Include="..\CutLocal.Inference\CutLocal.Inference.csproj" />
+    <ProjectReference Include="..\CutLocal.Persistence\CutLocal.Persistence.csproj" />
+  </ItemGroup>
+</Project>

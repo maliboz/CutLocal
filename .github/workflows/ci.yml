@@ -1,0 +1,93 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_NOLOGO: true
+  NUGET_XMLDOC_MODE: skip
+  CUTLOCAL_VERSION: 0.1.5
+
+jobs:
+  build-test-package:
+    runs-on: windows-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          global-json-file: global.json
+
+      - name: Restore solution
+        run: dotnet restore CutLocal.sln
+
+      - name: Restore win-x64 ReadyToRun assets
+        run: dotnet restore src\CutLocal.App\CutLocal.App.csproj --runtime win-x64 -p:PublishReadyToRun=true
+
+      - name: Restore WiX installer
+        run: dotnet restore installer\CutLocal.Setup.wixproj
+
+      - name: Verify formatting
+        run: dotnet format CutLocal.sln --verify-no-changes --no-restore --verbosity minimal
+
+      - name: Build
+        run: dotnet build CutLocal.sln --configuration Release --no-restore
+
+      - name: Unit tests
+        run: dotnet test tests\CutLocal.UnitTests\CutLocal.UnitTests.csproj --configuration Release --no-build --no-restore
+
+      - name: Integration tests
+        run: dotnet test tests\CutLocal.IntegrationTests\CutLocal.IntegrationTests.csproj --configuration Release --no-build --no-restore
+
+      - name: Golden image tests
+        run: dotnet test tests\CutLocal.GoldenImageTests\CutLocal.GoldenImageTests.csproj --configuration Release --no-build --no-restore
+
+      - name: Stress tests
+        run: dotnet test tests\CutLocal.StressTests\CutLocal.StressTests.csproj --configuration Release --no-build --no-restore
+
+      - name: Validate model manifests
+        run: dotnet run --project tools\CutLocal.ModelTools\CutLocal.ModelTools.csproj --configuration Release --no-build -- assets\models\manifests --noncommercial
+
+      - name: Validate third-party license inventory
+        shell: pwsh
+        run: .\installer\Validate-LicenseInventory.ps1
+
+      - name: Audit solution dependencies
+        shell: pwsh
+        run: |
+          New-Item artifacts\audit -ItemType Directory -Force | Out-Null
+          dotnet package list --project CutLocal.sln --vulnerable --include-transitive --format json --output-version 1 --no-restore |
+            Set-Content artifacts\audit\solution.json -Encoding UTF8
+          dotnet package list --project installer\CutLocal.Setup.wixproj --vulnerable --include-transitive --format json --output-version 1 --no-restore |
+            Set-Content artifacts\audit\installer.json -Encoding UTF8
+          .\installer\Assert-DependencyAudit.ps1 -ReportPath artifacts\audit\solution.json, artifacts\audit\installer.json
+
+      - name: Build portable ZIP and MSI
+        shell: pwsh
+        run: |
+          $dotnetPath = (Get-Command dotnet).Source
+          .\installer\Build-Release.ps1 -Version $env:CUTLOCAL_VERSION -DotNetPath $dotnetPath
+
+      - name: Build macOS architecture archives
+        shell: pwsh
+        run: .\installer\Build-MacRelease.ps1 -Version $env:CUTLOCAL_VERSION -DotNetPath (Get-Command dotnet).Source
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: CutLocal-${{ env.CUTLOCAL_VERSION }}-all-platforms
+          path: artifacts/release/*
+          if-no-files-found: error
+          retention-days: 14

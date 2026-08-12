@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.DirectML" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CutLocal.Domain\CutLocal.Domain.csproj" />
+    <ProjectReference Include="..\..\src\CutLocal.Imaging\CutLocal.Imaging.csproj" />
+    <ProjectReference Include="..\..\src\CutLocal.Inference\CutLocal.Inference.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Shared\FixtureModel.cs" Link="Shared\FixtureModel.cs" />
+  </ItemGroup>
+</Project>

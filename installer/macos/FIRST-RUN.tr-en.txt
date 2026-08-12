@@ -1,0 +1,49 @@
+CutLocal macOS - ilk çalıştırma / first run
+===========================================
+
+DOĞRU PAKETİ SEÇ
+
+- Apple M serisi işlemcili Mac: macos-arm64
+- Intel işlemcili Mac: macos-x64
+
+KURULUM
+
+1. .tar.gz arşivine çift tıklayarak paketi tamamen çıkart.
+2. Spotlight ile Terminal uygulamasını kendin aç. FIX-CUTLOCAL.command dosyasına
+   Finder'dan çift tıklama; macOS betiğin kendisini de engelleyebilir.
+3. Terminal'e tırnaklar olmadan `/bin/bash ` yaz; kapanış işaretinden önceki boşluğu koru.
+4. FIX-CUTLOCAL.command dosyasını Terminal penceresine sürükleyip bırak.
+5. Enter'a bas. Betik yalnızca yanındaki CutLocal.app paketini doğrular,
+   karantinayı o paketten kaldırır, ücretsiz yerel ad-hoc imza uygular, imzayı
+   doğrular ve CutLocal'ı açar.
+6. Terminal "TAMAM" dedikten sonra CutLocal.app dosyasını Applications
+   (Uygulamalar) klasörüne taşıyabilirsin.
+
+Bu paket self-contained'dır; Python veya ayrı bir .NET kurulumu istemez.
+Varsayılan U2NetP modeli pakete dahildir. Kısıtlı isteğe bağlı modeller yalnızca
+uygulama içindeki lisans koşulu açıkça kabul edilirse indirilebilir.
+
+ÖNEMLİ
+
+Bu öğrenci/açık kaynak dağıtımı Apple Developer ID ile imzalanıp noterlenmemiştir.
+Bu yüzden macOS güvenlik uyarısı göstermesi normaldir. Uygulamayı ve ilk çalıştırma
+betiğini yalnızca güvendiğin kaynaktan aldıysan aç. Betik hata verirse Terminal
+çıktısını kapatmadan önce kopyala ve kişisel yolları temizleyerek hata bildirimine
+ekle.
+
+ENGLISH
+
+1. Use macos-arm64 for an Apple M-series Mac, or macos-x64 for an Intel Mac.
+2. Double-click the .tar.gz archive and let macOS extract it completely.
+3. Open Terminal yourself with Spotlight. Do not launch FIX-CUTLOCAL.command by
+   double-clicking it in Finder because Gatekeeper may block the script itself.
+4. Type `/bin/bash `, including the trailing space.
+5. Drag FIX-CUTLOCAL.command into Terminal and press Enter. The readable script
+   validates only the adjacent CutLocal.app, removes quarantine from that bundle,
+   applies a local ad-hoc signature, verifies it, and launches CutLocal.
+6. After Terminal reports success, move CutLocal.app to Applications.
+
+The app is self-contained and does not require Python or a separate .NET install.
+This open-source build is not signed/notarized with an Apple Developer ID. Run it
+only when you trust the release source. Preserve and sanitize Terminal output if
+the first-launch procedure fails.
