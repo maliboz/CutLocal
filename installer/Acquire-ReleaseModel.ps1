@@ -9,6 +9,7 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+Add-Type -AssemblyName System.Net.Http
 
 function Test-ModelFile {
     param(
@@ -56,11 +57,12 @@ function Receive-HttpsFile {
         [string]$Path
     )
 
-    Add-Type -AssemblyName System.Net.Http
     $handler = [System.Net.Http.HttpClientHandler]::new()
     $handler.AllowAutoRedirect = $false
     $client = [System.Net.Http.HttpClient]::new($handler)
     $client.Timeout = [System.Threading.Timeout]::InfiniteTimeSpan
+    $client.DefaultRequestHeaders.UserAgent.ParseAdd('CutLocal-ReleaseBuilder/0.1')
+    $client.DefaultRequestHeaders.Accept.ParseAdd('application/octet-stream')
     try {
         $current = $Uri
         foreach ($redirect in 0..5) {
@@ -108,6 +110,53 @@ function Receive-HttpsFile {
     finally {
         $client.Dispose()
         $handler.Dispose()
+    }
+}
+
+function Test-TransientDownloadException {
+    param([Parameter(Mandatory)][System.Exception]$Exception)
+
+    $current = $Exception
+    while ($null -ne $current) {
+        if ($current -is [System.Net.Http.HttpRequestException] -or
+            $current -is [System.IO.IOException] -or
+            $current -is [System.Threading.Tasks.TaskCanceledException] -or
+            $current -is [System.Net.Sockets.SocketException]) {
+            return $true
+        }
+
+        $current = $current.InnerException
+    }
+
+    return $false
+}
+
+function Receive-HttpsFileWithRetry {
+    param(
+        [Parameter(Mandatory)][uri]$Uri,
+        [Parameter(Mandatory)][string]$Path,
+        [ValidateRange(1, 8)][int]$MaximumAttempts = 4
+    )
+
+    for ($attempt = 1; $attempt -le $MaximumAttempts; $attempt++) {
+        if (Test-Path -LiteralPath $Path) {
+            Remove-Item -LiteralPath $Path -Force
+        }
+
+        try {
+            Receive-HttpsFile -Uri $Uri -Path $Path
+            return
+        }
+        catch {
+            if ($attempt -eq $MaximumAttempts -or
+                -not (Test-TransientDownloadException -Exception $_.Exception)) {
+                throw
+            }
+
+            $delaySeconds = [int][Math]::Pow(2, $attempt)
+            Write-Warning "Release model download attempt $attempt failed; retrying in $delaySeconds seconds."
+            Start-Sleep -Seconds $delaySeconds
+        }
     }
 }
 
@@ -168,7 +217,7 @@ if (Test-Path -LiteralPath $partialPath) {
 }
 
 try {
-    Receive-HttpsFile -Uri $downloadUri -Path $partialPath
+    Receive-HttpsFileWithRetry -Uri $downloadUri -Path $partialPath
     if (-not (Test-ModelFile -Path $partialPath -ExpectedLength $expectedLength -ExpectedSha256 $expectedSha256)) {
         throw "Release model failed exact byte-length or SHA-256 verification."
     }

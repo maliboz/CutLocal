@@ -16,6 +16,12 @@ project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added all-platform artifact checksums, macOS release documentation, and an
   explicit pre-1.0 limitations statement.
 
+### Fixed
+
+- Made release-model acquisition resilient to transient HTTP, socket, timeout,
+  and I/O failures while preserving HTTPS-only redirects, exact byte-length
+  checks, and SHA-256 verification.
+
 ## [0.1.5] - 2026-07-25
 
 ### Fixed
